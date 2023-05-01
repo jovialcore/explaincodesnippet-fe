@@ -236,11 +236,12 @@
                     <div class="mb-3">
                         <form class="">
                             <label for="formFile" class="form-label">Select file input example</label>
-                            <input class="form-control" type="file" id="formFile" accept="image/*"
-                                @change="uploadedFile">
+                            <input class="form-control" type="file" id="formFile" accept='application/image'
+                                @change="uploadedFile" x-ref="file">
                         </form>
                         <div class="loader mt-2" x-show="loading"></div>
-                        <button class="btn btn-secondary mt-3" x-show="button"> Explain please </button>
+                        <button class="btn btn-secondary mt-3" x-show="button" @click="explain"> Explain please
+                        </button>
 
                     </div>
                 </div>
@@ -287,6 +288,7 @@
 
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
 
@@ -331,17 +333,28 @@
                 explain() {
                     this.loading = true,
                         this.button = false,
-                        axios.post(
-                            'http://localhost:8081/api/extract/imagetext',
-                            this.form
 
-                        )
-                            .then(() => {
-                                console.log(response.data)
-                            })
-                            .catch(() => {
-                                console.log('Something definitely went wrong')
-                            })
+
+                        this.form.append('image', this.$refs.file.files[0])
+
+                    for (const value of this.form.values()) {
+                        console.log(value);
+                    }
+
+
+                    axios.post(
+                        'http://localhost:8081/api/extract/imagetext',
+                        this.form
+
+                    )
+                        .then(() => {
+                            console.log(response.data)
+                        })
+                        .catch(() => {
+                            console.log('Something definitely went wrong')
+                            this.loading = false
+
+                        })
 
                 }
 
