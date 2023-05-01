@@ -220,13 +220,15 @@
                                 @change="uploadedFile">
                         </form>
 
+                        <button class="btn btn-secondary mt-3" > Explain please </button>
+
                     </div>
                 </div>
 
 
                 <!--  start when no image is availble  -->
                 <template x-if="thumbnailStatus">
-                    <div class="col-md-5">
+                    <div class="col-md-5" >
                         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
                             width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
                             aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
@@ -241,9 +243,9 @@
 
 
                 <!--  start when image is availble  -->
-                <template x-if="!thumbnailStatus">
-                    <div class="col-md-5">
-                        <img :src="imageUrl" class="img-fluid">
+                <template x-if="!thumbnailStatus"  >
+                    <div class="col-md-5 d-flex align-items-center justify-content-center" >
+                        <img :src="imageUrl" class="img-fluid ">
                     </div>
                 </template>
                 <!--  end when image is availble  -->
