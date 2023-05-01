@@ -1,7 +1,0 @@
-function imageViewer() {
-
-    return {
-        imageUrl: "",
-    }
-
-}
