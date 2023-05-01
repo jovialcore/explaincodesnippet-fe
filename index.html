@@ -92,6 +92,26 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
+
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #555;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 
 
@@ -219,8 +239,8 @@
                             <input class="form-control" type="file" id="formFile" accept="image/*"
                                 @change="uploadedFile">
                         </form>
-
-                        <button class="btn btn-secondary mt-3" > Explain please </button>
+                        <div class="loader mt-2" x-show="loading"></div>
+                        <button class="btn btn-secondary mt-3" x-show="button"> Explain please </button>
 
                     </div>
                 </div>
@@ -228,14 +248,14 @@
 
                 <!--  start when no image is availble  -->
                 <template x-if="thumbnailStatus">
-                    <div class="col-md-5" >
+                    <div class="col-md-5">
                         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
                             width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
                             aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
                             <title>Placeholder</title>
 
                             <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
-                                fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+                                fill="var(--bs-secondary-color)" dy=".3em">No Image?👀</text>
                         </svg>
                     </div>
                 </template>
@@ -243,8 +263,8 @@
 
 
                 <!--  start when image is availble  -->
-                <template x-if="!thumbnailStatus"  >
-                    <div class="col-md-5 d-flex align-items-center justify-content-center" >
+                <template x-if="!thumbnailStatus">
+                    <div class="col-md-5 d-flex align-items-center justify-content-center">
                         <img :src="imageUrl" class="img-fluid ">
                     </div>
                 </template>
@@ -274,20 +294,22 @@
 
             return {
                 thumbnailStatus: true,
-             
+                loading: false,
+
+                button: true,
                 imageUrl: "",
                 form: new FormData(),
 
                 //get state of the uploaded file
                 uploadedFile(e) {
-                  
+
 
                     this.getFileToDisplay(e, src => this.imageUrl = src)
 
                     // say what will happen when a file is uploaded
                     this.thumbnailStatus = false
 
-                  
+
                 },
 
                 getFileToDisplay(e, image) {
@@ -301,6 +323,25 @@
 
                     // 
                     reader.onload = e => image(e.target.result)
+
+                },
+
+                // explain 
+
+                explain() {
+                    this.loading = true,
+                        this.button = false,
+                        axios.post(
+                            'http://localhost:8081/api/extract/imagetext',
+                            this.form
+
+                        )
+                            .then(() => {
+                                console.log(response.data)
+                            })
+                            .catch(() => {
+                                console.log('Something definitely went wrong')
+                            })
 
                 }
 
