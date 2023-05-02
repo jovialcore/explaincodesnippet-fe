@@ -220,124 +220,185 @@
         </nav>
     </header>
 
-    <main>
+    <main x-data="imageViewer()">
 
+        <template x-if="codeExplained">
 
-
-        <!-- Marketing messaging and featurettes
-  ================================================== -->
-        <!-- Wrap the rest of the page in another container to center all the content. -->
-
-        <div class="container marketing">
+            <div class="container marketing">
 
 
 
 
-            <!-- START THE FEATURETTES -->
+                <!-- START THE FEATURETTES -->
 
-            <hr class="featurette-divider">
+                <hr class="featurette-divider">
 
-            <div class="row featurette" x-data="imageViewer()">
-
-
-                <div class="col-md-12">
+                <div class="row featurette ">
 
 
+                    <div class="col-md-6">
+                        <h2 class="featurette-heading fw-normal lh-1">Explanation</h2>
+                        <p class="lead">Here you go !</p>
 
-                    <div class="bg-dark">
-                        <pre><code class="language-php " id="code"> 
-            
-            
-                        try {
-                            $result = $textractClient->detectDocumentText([
-                                'Document' => [
-                                    'Bytes' => file_get_contents($file)
-                                ]
-                            ]);
-                
-                            foreach ($result->get('Blocks') as $block) {
-                                if ($block['BlockType'] != 'WORD') {
-                                    continue;
-                                }
-                
-                                echo $block['Text'] . " ";
-                            }
-                        } catch (TextractException $e) {
-                            // output error message if fails
-                            echo $e->getMessage();
-                        }
-                
-                        $openaikey = getenv('OPENAI_API_KEY');
-                
-                
-                        return new JsonResponse($data);
-                    
-                        </code></pre>
+                        <textarea class="form-control" placeholder="Enter your code here..." id="code"
+                            rows="10"></textarea>
+
+
                     </div>
+                    <div class="col-md-6">
 
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+                        <div style="height: 100%">
+                            <pre style="height: 500px"><code class="language-php " id="code" style="overflow-y: auto;"> 
+                                
+                 
+$request = ServerRequestFactory::fromGlobals();
+
+// Get the uploaded file from the request
+$file = $request->getUploadedFiles()['image'];
+
+$textractClient = new TextractClient([
+    'version' => 'latest',
+    'region' => getenv('AWS_REGION'),
+    'credentials' => [
+        'key'    => getenv('AWS_KEY'),
+        'secret' => getenv('AWS_SECRET')
+    ],
+    'scheme' => 'https',
+]);
+
+$request = ServerRequestFactory::fromGlobals();
+
+// Get the uploaded file from the request
+$file = $request->getUploadedFiles()['image'];
+
+$textractClient = new TextractClient([
+    'version' => 'latest',
+    'region' => getenv('AWS_REGION'),
+    'credentials' => [
+        'key'    => getenv('AWS_KEY'),
+        'secret' => getenv('AWS_SECRET')
+    ],
+    'scheme' => 'https',
+]);
+           
+// Get the uploaded file from the request
+$file = $request->getUploadedFiles()['image'];
+
+$textractClient = new TextractClient([
+    'version' => 'latest',
+    'region' => getenv('AWS_REGION'),
+    'credentials' => [
+        'key'    => getenv('AWS_KEY'),
+        'secret' => getenv('AWS_SECRET')
+    ],
+    'scheme' => 'https',
+]);
+       
+                                
+ 
+                        </code></pre>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+                            </div>
                         </div>
                     </div>
+
+               
                 </div>
 
-                <div class="col-md-7">
-                    <h2 class="featurette-heading fw-normal lh-1">Upload a code snippet</h2>
-                    <p class="lead">...and let Ai explain the code in the snippet for you !</p>
+                <hr class="featurette-divider">
 
-                    <div class="mb-3">
-                        <form class="">
-                            <label for="formFile" class="form-label">Select file input example</label>
-                            <input class="form-control" type="file" id="formFile" accept='application/image'
-                                @change="uploadedFile" x-ref="file">
-                        </form>
-                        <div class="loader mt-2" x-show="loading"></div>
-                        <button class="btn btn-secondary mt-3" x-show="button" @click="explain"> Explain please
-                        </button>
+                <!-- /END THE FEATURETTES -->
 
+            </div><!-- /.container -->
+
+
+            <!-- FOOTER -->
+            <footer class="container">
+                <p class="float-end"><a href="#">Back to top</a></p>
+                <p>&copy; 2023 jovialcore.tech </p>
+            </footer>
+        </template>
+
+
+        <template  x-if="!codeExplained">
+
+
+
+            <!-- Marketing messaging and featurettes
+  ================================================== -->
+            <!-- Wrap the rest of the page in another container to center all the content. -->
+
+            <div class="container marketing">
+
+                <!-- START THE FEATURETTES -->
+
+                <hr class="featurette-divider">
+
+                <div class="row featurette">
+
+                    <div class="col-md-7">
+                        <h2 class="featurette-heading fw-normal lh-1">Upload a code snippet</h2>
+                        <p class="lead">...and let Ai explain the code in the snippet for you !</p>
+
+                        <div class="mb-3">
+                            <form class="">
+                                <label for="formFile" class="form-label">Select a code snippet image</label>
+                                <input class="form-control" type="file" id="formFile" accept='application/image'
+                                    @change="uploadedFile" x-ref="file">
+                            </form>
+                            <div class="loader mt-2" x-show="loading"></div>
+                            <button class="btn btn-secondary mt-3" x-show="button" @click="explain"> Explain please
+                            </button>
+
+                        </div>
                     </div>
+
+
+                    <!--  start when no image is availble  -->
+                    <template x-if="thumbnailStatus">
+                        <div class="col-md-5">
+                            <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                                width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
+                                aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice"
+                                focusable="false">
+                                <title>Placeholder</title>
+
+                                <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
+                                    fill="var(--bs-secondary-color)" dy=".3em">No Image?👀</text>
+                            </svg>
+                        </div>
+                    </template>
+                    <!--  end when no image is availble  -->
+
+
+                    <!--  start when image is availble  -->
+                    <template x-if="!thumbnailStatus">
+                        <div class="col-md-5 d-flex align-items-center justify-content-center">
+                            <img :src="imageUrl" class="img-fluid ">
+                        </div>
+                    </template>
+                    <!--  end when image is availble  -->
                 </div>
 
+                <hr class="featurette-divider">
 
-                <!--  start when no image is availble  -->
-                <template x-if="thumbnailStatus">
-                    <div class="col-md-5">
-                        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-                            width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img"
-                            aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title>Placeholder</title>
+                <!-- /END THE FEATURETTES -->
 
-                            <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
-                                fill="var(--bs-secondary-color)" dy=".3em">No Image?👀</text>
-                        </svg>
-                    </div>
-                </template>
-                <!--  end when no image is availble  -->
+            </div><!-- /.container -->
 
 
-                <!--  start when image is availble  -->
-                <template x-if="!thumbnailStatus">
-                    <div class="col-md-5 d-flex align-items-center justify-content-center">
-                        <img :src="imageUrl" class="img-fluid ">
-                    </div>
-                </template>
-                <!--  end when image is availble  -->
-            </div>
-
-            <hr class="featurette-divider">
-
-            <!-- /END THE FEATURETTES -->
-
-        </div><!-- /.container -->
-
-
-        <!-- FOOTER -->
-        <footer class="container">
-            <p class="float-end"><a href="#">Back to top</a></p>
-            <p>&copy; 2023 jovialcore.tech </p>
-        </footer>
+            <!-- FOOTER -->
+            <footer class="container">
+                <p class="float-end"><a href="#">Back to top</a></p>
+                <p>&copy; 2023 jovialcore.tech </p>
+            </footer>
+        </template>
     </main>
+
 
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -377,6 +438,7 @@
             return {
                 thumbnailStatus: true,
                 loading: false,
+                codeExplained: false,
 
                 button: true,
                 imageUrl: "",
@@ -427,6 +489,7 @@
                     )
                         .then(() => {
                             console.log(response.data)
+                            this.codeExlained = true
                         })
                         .catch(() => {
                             console.log('Something definitely went wrong')
