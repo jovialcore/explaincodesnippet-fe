@@ -17,7 +17,7 @@
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"></script>
 
@@ -222,12 +222,45 @@
     <main>
 
 
+        <div class="bg-dark">
+            <pre><code class="language-php "> 
+
+
+            try {
+                $result = $textractClient->detectDocumentText([
+                    'Document' => [
+                        'Bytes' => file_get_contents($file)
+                    ]
+                ]);
+    
+                foreach ($result->get('Blocks') as $block) {
+                    if ($block['BlockType'] != 'WORD') {
+                        continue;
+                    }
+    
+                    echo $block['Text'] . " ";
+                }
+            } catch (TextractException $e) {
+                // output error message if fails
+                echo $e->getMessage();
+            }
+    
+            $openaikey = getenv('OPENAI_API_KEY');
+    
+    
+            return new JsonResponse($data);
+        
+            </code></pre>
+        </div>
+
 
         <!-- Marketing messaging and featurettes
   ================================================== -->
         <!-- Wrap the rest of the page in another container to center all the content. -->
 
         <div class="container marketing">
+
+
 
 
             <!-- START THE FEATURETTES -->
@@ -238,12 +271,7 @@
 
                 <div class="col-md-12">
 
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <textarea class="form-control" placeholder="Enter text" id="textArea" rows="10"></textarea>
-                            <label for="textArea">Copy Code</label>
-                        </div>
-                    </div>
+
 
                     <div class="row mt-3">
                         <div class="col-md-12">
@@ -312,7 +340,7 @@
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
 
 
@@ -321,6 +349,9 @@
 
 
         // add highltight ,js 
+
+        hljs.highlightAll();
+
 
 
         var copyBtn = document.getElementById("copyBtn");
