@@ -13,9 +13,15 @@
 
     <link rel="canonical" href="https://jovialcore.tech/extractsnippetandexplain">
 
+
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"></script>
+
+
 
 
 
@@ -229,6 +235,23 @@
             <hr class="featurette-divider">
 
             <div class="row featurette" x-data="imageViewer()">
+
+                <div class="col-md-12">
+
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Enter text" id="textArea" rows="10"></textarea>
+                            <label for="textArea">Copy Code</label>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-7">
                     <h2 class="featurette-heading fw-normal lh-1">Upload a code snippet</h2>
                     <p class="lead">...and let Ai explain the code in the snippet for you !</p>
@@ -287,10 +310,32 @@
     </main>
 
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+
+
+
     <script>
+
+
+        // add highltight ,js 
+
+
+        var copyBtn = document.getElementById("copyBtn");
+        var textArea = document.getElementById("textArea");
+
+        copyBtn.addEventListener("click", function () {
+            textArea.select();
+            document.execCommand("copy");
+            copyBtn.innerHTML = "Copied"
+            setTimeout(() => {
+                copyBtn.innerHTML = 'Copy to clipboard'
+
+            }, 800);
+        });
+
 
         function imageViewer() {
 
@@ -310,7 +355,7 @@
 
                     // say what will happen when a file is uploaded
                     this.thumbnailStatus = false
-            
+
                 },
 
                 getFileToDisplay(e, image) {
