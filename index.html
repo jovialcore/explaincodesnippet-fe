@@ -16,8 +16,9 @@
 
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/tomorrow-night-blue.min.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"></script>
 
@@ -222,37 +223,6 @@
     <main>
 
 
-        <div class="bg-dark">
-            <pre><code class="language-php "> 
-
-
-            try {
-                $result = $textractClient->detectDocumentText([
-                    'Document' => [
-                        'Bytes' => file_get_contents($file)
-                    ]
-                ]);
-    
-                foreach ($result->get('Blocks') as $block) {
-                    if ($block['BlockType'] != 'WORD') {
-                        continue;
-                    }
-    
-                    echo $block['Text'] . " ";
-                }
-            } catch (TextractException $e) {
-                // output error message if fails
-                echo $e->getMessage();
-            }
-    
-            $openaikey = getenv('OPENAI_API_KEY');
-    
-    
-            return new JsonResponse($data);
-        
-            </code></pre>
-        </div>
-
 
         <!-- Marketing messaging and featurettes
   ================================================== -->
@@ -269,9 +239,41 @@
 
             <div class="row featurette" x-data="imageViewer()">
 
+
                 <div class="col-md-12">
 
 
+
+                    <div class="bg-dark">
+                        <pre><code class="language-php " id="code"> 
+            
+            
+                        try {
+                            $result = $textractClient->detectDocumentText([
+                                'Document' => [
+                                    'Bytes' => file_get_contents($file)
+                                ]
+                            ]);
+                
+                            foreach ($result->get('Blocks') as $block) {
+                                if ($block['BlockType'] != 'WORD') {
+                                    continue;
+                                }
+                
+                                echo $block['Text'] . " ";
+                            }
+                        } catch (TextractException $e) {
+                            // output error message if fails
+                            echo $e->getMessage();
+                        }
+                
+                        $openaikey = getenv('OPENAI_API_KEY');
+                
+                
+                        return new JsonResponse($data);
+                    
+                        </code></pre>
+                    </div>
 
                     <div class="row mt-3">
                         <div class="col-md-12">
@@ -353,19 +355,21 @@
         hljs.highlightAll();
 
 
-
-        var copyBtn = document.getElementById("copyBtn");
-        var textArea = document.getElementById("textArea");
-
-        copyBtn.addEventListener("click", function () {
-            textArea.select();
-            document.execCommand("copy");
-            copyBtn.innerHTML = "Copied"
-            setTimeout(() => {
-                copyBtn.innerHTML = 'Copy to clipboard'
-
-            }, 800);
+        var code = document.getElementById('code');
+        var copyButton = document.getElementById("copyBtn");
+        copyButton.addEventListener('click', function () {
+            var range = document.createRange();
+            range.selectNode(code);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            copyButton.textContent = 'Copied!';
+            setTimeout(function () {
+                copyButton.textContent = 'Copy';
+            }, 2000);
         });
+
 
 
         function imageViewer() {
