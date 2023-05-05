@@ -241,7 +241,8 @@
                                     @change="uploadedFile" x-ref="file">
                             </form>
                             <div class="loader mt-2" x-show="loading"></div>
-                            <button class="btn btn-secondary mt-3" x-show="button" @click="explain"> Explain please
+                            <button class="btn btn-secondary mt-3" x-bind:disabled="btnDisabled" x-show="button"
+                                @click="explain"> Explain please
                             </button>
 
                         </div>
@@ -289,7 +290,7 @@
 
                 <!--  start when image is availble  -->
                 <template x-if="!thumbnailStatus">
-                    <div class="col-md-5 mt-4 mt-md-auto  d-flex align-items-md-end justify-content-md-center" >
+                    <div class="col-md-5 mt-4 mt-md-auto  d-flex align-items-md-end justify-content-md-center">
                         <img :src="imageUrl" class="img-fluid ">
                     </div>
                 </template>
@@ -355,13 +356,14 @@
                 result: '',
                 button: true,
                 imageUrl: "",
+                btnDisabled: true,
                 form: new FormData(),
 
                 //get state of the uploaded file
                 uploadedFile(e) {
-                    this.button = true
+                    this.btnDisabled = false,
 
-                    this.getFileToDisplay(e, src => this.imageUrl = src)
+                        this.getFileToDisplay(e, src => this.imageUrl = src)
 
                     // say what will happen when a file is uploaded
                     this.thumbnailStatus = false
@@ -379,6 +381,7 @@
 
                     // 
                     reader.onload = e => image(e.target.result)
+
 
                 },
 
