@@ -211,7 +211,7 @@
                             <a class="nav-link" href="https://twitter.com/jovial_core">About the dev</a>
                         </li>
                     </ul>
-                 
+
                 </div>
             </div>
         </nav>
@@ -257,10 +257,12 @@
 
                         <h2 class="featurette-heading fw-normal lh-1">Explanation</h2>
                         <p class="lead">Here you go !</p>
+                        <div class="d-flex align-items-center justify-content-center">
 
-                        <textarea class="form-control" placeholder="Enter your code here..." id="code"
-                            rows="10" x-text="result"></textarea>
+                            <textarea class="form-control" placeholder="Enter your code here..." id="code" rows="10"
+                                x-text="result"></textarea>
 
+                        </div>
 
                     </div>
 
@@ -287,7 +289,7 @@
 
                 <!--  start when image is availble  -->
                 <template x-if="!thumbnailStatus">
-                    <div class="col-md-5 d-flex align-items-center justify-content-center">
+                    <div class="col-md-5 d-flex align-items-end justify-content-center">
                         <img :src="imageUrl" class="img-fluid ">
                     </div>
                 </template>
@@ -398,7 +400,7 @@
                         .then((res) => {
 
                             this.result = res.data.data
-                        
+
                             this.codeExplained = false
                             this.loading = false
 
