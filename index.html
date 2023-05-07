@@ -391,12 +391,10 @@
                     this.loading = true,
                         this.button = false,
 
-
                         this.form.append('image', this.$refs.file.files[0])
-
-
+                        
                     axios.post(
-                        'https://test.jovialcore.tech/api/extract/imagetext',
+                        'https://jovialcore.tech/wsc/api/extract/imagetext',
                         this.form
 
                     )
