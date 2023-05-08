@@ -231,7 +231,7 @@
                 <template x-if="codeExplained">
 
                     <div class="col-md-7">
-                        <h2>Upload any text-labelled image  (or image with a text)</h2>
+                        <h2>Upload any text-labelled image (or image with a text)</h2>
                         <p class="lead">...and let Ai explain the image for you. It works for code snippets too.!</p>
 
                         <div class="mb-3">
@@ -265,6 +265,8 @@
 
                         </div>
 
+                        <button class="btn btn-secondary mt-3" @click="showUpload"> Upload another image
+                        </button>
                     </div>
 
 
@@ -325,27 +327,6 @@
 
     <script>
 
-        // add highltight ,js 
-
-        hljs.highlightAll();
-
-        var code = document.getElementById('code');
-        var copyButton = document.getElementById("copyBtn");
-        copyButton.addEventListener('click', function () {
-            var range = document.createRange();
-            range.selectNode(code);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            copyButton.textContent = 'Copied!';
-            setTimeout(function () {
-                copyButton.textContent = 'Copy';
-            }, 2000);
-        });
-
-
-
         function imageViewer() {
 
             return {
@@ -384,7 +365,11 @@
 
 
                 },
-
+                showUpload() {
+                    this.codeExplained = true
+                    this.button= true
+                    this.btnDisabled =true
+                },
                 // explain 
 
                 explain() {
@@ -392,7 +377,7 @@
                         this.button = false,
 
                         this.form.append('image', this.$refs.file.files[0])
-                        
+
                     axios.post(
                         'https://jovialcore.tech/wsc/api/extract/imagetext',
                         this.form
